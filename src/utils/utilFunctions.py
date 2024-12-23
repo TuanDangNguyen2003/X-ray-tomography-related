@@ -1,33 +1,10 @@
 import numpy as np
-import tifffile as tiff
-import spam.deformation as defo
+import decomposePhi as defo
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-import automationReg as reg
 from functools import partial
-
-def count_white_pixels(folder_path: str, img_volume_imgJ: list[int] , max_nb_scans: int):
-    """
-    Counts the number of white pixels in a 3D .tiff image stack.
-
-    Args:
-        folder_path (str): Path to the folder containing the .tiff images.
-        img_volume_imgJ (list): List to store the volume of each image in ImageJ.
-    
-    Returns:
-        int: Total number of white pixels across all slices.
-    """
-    for i in range(max_nb_scans):
-        tiff_file = os.path.join(folder_path, f'Reslice of {i:02d}-reg-def.tif')
-        # Load the TIFF stack
-        image_stack = tiff.imread(tiff_file)
-        # Count white pixels (value 255)
-        white_pixel_count = np.sum(image_stack == 255)
-        img_volume_imgJ.append(white_pixel_count)
-    
-    return 
 
 def process_tsv(file_path: str):
     """
@@ -487,9 +464,6 @@ def plot_error_on(scan_folders: list[str], max_nb_scans: int ):
     plt.tight_layout()
     plt.show()
 
-def run_reg_script_on(nb_scans: int, first_img_path: str, output_path: str):
-    reg.run_reg_script_x_images(nb_scans, first_img_path, output_path)
-
 def logarithm_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=True):
     """
     Fits multiple sets of y_values simultaneously to the function y = a * log(x) + b using linear regression.
@@ -743,11 +717,6 @@ def plot_many_y_lists(x_values: list, y_values: list, x_label: str, y_labels: li
     plt.legend()
     plt.grid(True)  # Add grid for better readability
     plt.show()
-
-import numpy as np
-from scipy.optimize import curve_fit
-from functools import partial
-import matplotlib.pyplot as plt
 
 def exponential_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=True):
     """

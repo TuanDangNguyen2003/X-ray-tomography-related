@@ -6,6 +6,7 @@ rotationAngleDegThreshold = 0.0001
 # Value at which to consider no stretch to avoid numerical issues
 distanceFromIdentity = 0.00001
 
+
 def decomposeF(F, twoD=False, verbose=False):
     """
     Get components out of a transformation gradient tensor F
@@ -47,7 +48,7 @@ def decomposeF(F, twoD=False, verbose=False):
         "vol": numpy.nan,
         "dev": numpy.nan,
         "volss": numpy.nan,
-        "devss": numpy.nan
+        "devss": numpy.nan,
         # 'G': 3x3
     }
 
@@ -92,7 +93,9 @@ def decomposeF(F, twoD=False, verbose=False):
     # 2018-06-29 OS & ER check for negative eigenvalues
     # test "really" negative eigenvalues
     if CeigVal.any() / CeigVal.mean() < -1:
-        print("deformationFunction.decomposeF(): negative eigenvalue in transpose(F). Exiting")
+        print(
+            "deformationFunction.decomposeF(): negative eigenvalue in transpose(F). Exiting"
+        )
         print("Eigenvalues are: {}".format(CeigVal))
         exit()
     # for negative eigen values but close to 0 we set it to 0
@@ -136,7 +139,9 @@ def decomposeF(F, twoD=False, verbose=False):
     rotationAngleDeg = numpy.rad2deg(float(rotationAngleRad))
 
     if rotationAngleDeg > rotationAngleDegThreshold:
-        rotationAxis = numpy.array([R[2, 1] - R[1, 2], R[0, 2] - R[2, 0], R[1, 0] - R[0, 1]])
+        rotationAxis = numpy.array(
+            [R[2, 1] - R[1, 2], R[0, 2] - R[2, 0], R[1, 0] - R[0, 1]]
+        )
         rotationAxis /= 2.0 * numpy.sin(rotationAngleRad)
         rot = rotationAngleDeg * rotationAxis
     else:
@@ -203,7 +208,9 @@ def decomposeF(F, twoD=False, verbose=False):
     return transformation
 
 
-def decomposePhi(Phi, PhiCentre=[0.0, 0.0, 0.0], PhiPoint=[0.0, 0.0, 0.0], twoD=False, verbose=False):
+def decomposePhi(
+    Phi, PhiCentre=[0.0, 0.0, 0.0], PhiPoint=[0.0, 0.0, 0.0], twoD=False, verbose=False
+):
     """
     Get components out of a linear deformation function "Phi"
 
@@ -252,7 +259,7 @@ def decomposePhi(Phi, PhiCentre=[0.0, 0.0, 0.0], PhiPoint=[0.0, 0.0, 0.0], twoD=
         "vol": numpy.nan,
         "dev": numpy.nan,
         "volss": numpy.nan,
-        "devss": numpy.nan
+        "devss": numpy.nan,
         # 'G': 3x3
     }
 

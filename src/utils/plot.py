@@ -48,6 +48,7 @@ def plot_functions(
     functions: list[callable],
     baseline_nb: int,
     function_labels: list[str],
+    title: str,
 ):
     """
     Plots a list of functions and the original y_values on the same plot.
@@ -58,6 +59,7 @@ def plot_functions(
         functions (list of callable): List of functions to plot.
         baseline_nb (int): Identifier for the baseline dataset.
         function_labels (list of str): Labels for the functions being plotted.
+        title (str): Title of the plot.
     """
     # Ensure x_values and y_values are numpy arrays
     x = np.array(x_values, dtype=float)
@@ -84,10 +86,9 @@ def plot_functions(
 
     # Customize the plot
     plt.xticks(x)
-    plt.yticks(y)
     plt.xlabel("Time (minutes)", fontsize=12)
     plt.ylabel("Vol (%)", fontsize=12)
-    plt.title("Comparison of Original Data and Fit Functions", fontsize=14)
+    plt.title(title, fontsize=14)
     plt.legend(fontsize=10)
     plt.grid(True)
     plt.tight_layout()

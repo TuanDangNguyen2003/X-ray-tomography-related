@@ -3,3 +3,5 @@
 
 # TIFF image files
 *.tiff
+
+*.pyc

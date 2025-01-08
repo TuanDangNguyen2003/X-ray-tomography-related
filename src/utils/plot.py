@@ -2,7 +2,8 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-from utilFunctions import process_tsv
+
+from utils.utilFunctions import process_tsv
 
 
 def plot_many_y_lists(

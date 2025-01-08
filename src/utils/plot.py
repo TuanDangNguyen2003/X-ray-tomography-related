@@ -1,10 +1,13 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
+from utilFunctions import process_tsv
 
 
 def plot_many_y_lists(
-    x_values: list,
-    y_values: list,
+    x_values: list[int],
+    y_values: list[list],
     x_label: str,
     y_labels: list,
     general_yLabel: str,
@@ -94,4 +97,78 @@ def plot_functions(
     plt.tight_layout()
 
     # Show the plot
+    plt.show()
+
+
+def plot_vol_strain_of_all_baseline(scan_folders: list[str], max_nb_scans: int):
+    # Prepare lists for image labels, vol, and z values
+    vol_values = [0]  # Initial vol value at 0 for image 00
+
+    # Set the interval in minutes between scans
+    scan_interval = 20  # 20 minutes per scan
+
+    # Prepare lists to hold the data for each scan
+    all_vol_values = []
+    scan_labels = []
+
+    # Generate time labels based on the number of scans and interval
+    time_labels = [
+        i * scan_interval for i in range(max_nb_scans)
+    ]  # Starts from 0, increments by 20
+
+    for scan_index, folder_path in enumerate(scan_folders):
+        vol_values = [0]  # Initial vol value for the first scan point
+
+        for i in range(1, max_nb_scans):
+            file_name = f"00-{i:02d}-registration.tsv"
+            file_path = os.path.join(folder_path, file_name)
+
+            if os.path.exists(file_path):
+                print(f"Processing file: {file_name} in Scan {scan_index + 1}")
+                vol, _, _, _ = process_tsv(file_path)
+                vol_values.append(vol * 100)  # Convert vol to percentage
+            else:
+                vol_values.append(np.nan)  # For padding if necessary
+
+        # Store the results for each scan
+        all_vol_values.append(vol_values)
+        if scan_index == 6:
+            scan_labels.append("Low Mag 1")
+        elif scan_index == 7:
+            scan_labels.append("Low Power 1")
+        else:
+            scan_labels.append(f"Baseline {scan_index + 1}")
+
+    # Plot 'vol' evolution with time in minutes as the x-axis and add arrows
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+    for i, vol_values in enumerate(all_vol_values):
+        ax1.plot(
+            time_labels, vol_values, marker="o", linestyle="-", label=scan_labels[i]
+        )
+
+    ax1.set_xlabel("Time (minutes)", fontsize=12)
+    ax1.set_ylabel("Vol (%)", fontsize=12)
+    plt.title("Evolution of Vol over Time (in %)", fontsize=14)
+
+    # Adding arrows for x and y axes at the origin
+    ax1.annotate(
+        "",
+        xy=(time_labels[-1], 0),
+        xytext=(0, 0),
+        arrowprops=dict(arrowstyle="->", lw=1.5),
+    )
+    ax1.annotate(
+        "",
+        xy=(0, max(max(vol_values) for vol_values in all_vol_values)),
+        xytext=(0, 0),
+        arrowprops=dict(arrowstyle="->", lw=1.5),
+    )
+
+    ax1.set_xticks(time_labels)
+    plt.grid(True)
+    plt.legend(loc="center left", bbox_to_anchor=(1, 0.5), fontsize=10)
+    plt.tight_layout(rect=[0, 0, 0.85, 1])  # Adjusts the plot area to fit the legend
+
+    # Plot layout adjustments
+    plt.tight_layout()
     plt.show()

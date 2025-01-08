@@ -9,6 +9,7 @@ from utils.utilFunctions import process_tsv
 def plot_many_y_lists(
     x_values: list[int],
     y_values: list[list],
+    color_list: list[str],
     x_label: str,
     y_labels: list,
     general_yLabel: str,
@@ -20,6 +21,7 @@ def plot_many_y_lists(
     Parameters:
         x_values (list or numpy array): List of x-values.
         y_values (list of lists or numpy arrays): List of lists of y-values.
+        color_list (list of str): List of colors for each y-values set.
         y_labels (list): List of labels for each y-values set.
         x_label (str): Label for the x-axis.
         general_yLabel (str): General label for the y-axis.
@@ -31,11 +33,25 @@ def plot_many_y_lists(
             "The number of y-value sets must match the number of y_labels."
         )
 
+    # Check if the number of y-value sets matches the number of colors
+    if len(y_values) != len(color_list):
+        raise ValueError("The number of y-value sets must match the number of colors.")
+
+    # Check if any of the y_values lists are equal in length to the x_values list, if not, add nan values
+    for y in y_values:
+        if len(y) != len(x_values):
+            y.extend([np.nan] * (len(x_values) - len(y)))
+
     plt.figure(figsize=(10, 6))  # Set figure size
 
-    # Plot each y-values set with its corresponding label
+    # Plot each y-values set with its corresponding label and color
+    for y, label, color in zip(y_values, y_labels, color_list):
+        plt.plot(x_values, y, label=label, color=color, marker="o")
+
+    """
     for y, label in zip(y_values, y_labels):
         plt.plot(x_values, y, label=label, marker="o", linestyle="-")
+    """
 
     plt.xticks(x_values)  # Set x-ticks to match the x-values
     plt.xlabel(x_label)
@@ -101,7 +117,17 @@ def plot_functions(
     plt.show()
 
 
-def plot_vol_strain_of_all_baseline(scan_folders: list[str], max_nb_scans: int):
+def plot_vol_strain_of_folders(
+    scan_folders: list[str], max_nb_scans: int, color_list=list[str]
+):
+    """
+    Plots the evolution of volumetric strain for all baseline scans.
+
+    Parameters:
+        scan_folders (list of str): List of paths to baseline folders.
+        max_nb_scans (int): Maximum number of scans to plot.
+        color_list (list of str): List of colors for each baseline scan.
+    """
     # Prepare lists for image labels, vol, and z values
     vol_values = [0]  # Initial vol value at 0 for image 00
 
@@ -144,7 +170,12 @@ def plot_vol_strain_of_all_baseline(scan_folders: list[str], max_nb_scans: int):
     fig, ax1 = plt.subplots(figsize=(10, 6))
     for i, vol_values in enumerate(all_vol_values):
         ax1.plot(
-            time_labels, vol_values, marker="o", linestyle="-", label=scan_labels[i]
+            time_labels,
+            vol_values,
+            marker="o",
+            linestyle="-",
+            label=scan_labels[i],
+            color=color_list[i],
         )
 
     ax1.set_xlabel("Time (minutes)", fontsize=12)

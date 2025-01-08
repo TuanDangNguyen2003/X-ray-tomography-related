@@ -43,6 +43,38 @@ def process_tsv(file_path: str):
     )  # Return both 'vol' and 'z' (zoom)
 
 
+def get_vol_from_tsv_folder(folder_paths: list[str], nb_scans: int):
+    """
+    Get the volumetric strain from folders of TSV files.
+
+    Parameters:
+        folder_paths: list of path to the folder containing TSV files
+        nb_scans: number of scans to process
+
+    returns: list of list vol values
+    """
+    all_vol_values = []
+
+    for scan_index, folder_path in enumerate(folder_paths):
+        vol_values = [0]  # Initial vol value for the first scan point
+
+        for i in range(1, nb_scans):
+            file_name = f"00-{i:02d}-registration.tsv"
+            file_path = os.path.join(folder_path, file_name)
+
+            if os.path.exists(file_path):
+                print(f"Processing file: {file_name} in Scan {scan_index + 1}")
+                vol, _, _, _ = process_tsv(file_path)
+                vol_values.append(vol * 100)  # Convert vol to percentage
+            else:
+                vol_values.append(np.nan)  # For padding if necessary
+
+        # Store the results for each scan
+        all_vol_values.append(vol_values)
+
+    return all_vol_values
+
+
 def plot_vol_strain_and_imgj_volume(
     img_data: list[int], baseline_number_path: list[str], nb_scans: list[int]
 ):

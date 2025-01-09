@@ -43,7 +43,7 @@ def process_tsv(file_path: str):
     )  # Return both 'vol' and 'z' (zoom)
 
 
-def get_vol_from_tsv_folder(folder_paths: list[str], nb_scans: int):
+def get_vol_from_tsv_folders(folder_paths: list[str], nb_scans: int):
     """
     Get the volumetric strain from folders of TSV files.
 
@@ -63,7 +63,6 @@ def get_vol_from_tsv_folder(folder_paths: list[str], nb_scans: int):
             file_path = os.path.join(folder_path, file_name)
 
             if os.path.exists(file_path):
-                print(f"Processing file: {file_name} in Scan {scan_index + 1}")
                 vol, _, _, _ = process_tsv(file_path)
                 vol_values.append(vol * 100)  # Convert vol to percentage
             else:

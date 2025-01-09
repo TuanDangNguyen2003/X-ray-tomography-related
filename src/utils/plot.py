@@ -159,12 +159,17 @@ def plot_vol_strain_of_folders(
 
         # Store the results for each scan
         all_vol_values.append(vol_values)
+
+        scan_labels.append(scan_folders[scan_index].split("/")[-1])
+
+        """
         if scan_index == 6:
             scan_labels.append("Low Mag 1")
         elif scan_index == 7:
             scan_labels.append("Low Power 1")
         else:
             scan_labels.append(f"Baseline {scan_index + 1}")
+        """
 
     # Plot 'vol' evolution with time in minutes as the x-axis and add arrows
     fig, ax1 = plt.subplots(figsize=(10, 6))

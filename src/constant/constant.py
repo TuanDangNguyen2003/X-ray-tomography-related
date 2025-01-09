@@ -6,6 +6,8 @@ PATH_TSV_FOLDER_BASELINE_5 = "data/tsv/baseline_5"
 PATH_TSV_FOLDER_BASELINE_6 = "data/tsv/baseline_6"
 PATH_TSV_FOLDER_LOW_MAG_1 = "data/tsv/low_mag_1"
 PATH_TSV_FOLDER_LOW_POW_1 = "data/tsv/low_pow_1"
+PATH_TSV_FOLDER_LOW_MAG_2 = "data/tsv/low_mag_2"
+PATH_TSV_FOLDER_LOW_POW_2 = "data/tsv/low_pow_2"
 
 ALL_TSV_FOLDERS = [
     "data/tsv/baseline_1",
@@ -16,6 +18,8 @@ ALL_TSV_FOLDERS = [
     "data/tsv/baseline_6",
     "data/tsv/low_mag_1",
     "data/tsv/low_pow_1",
+    "data/tsv/low_mag_2",
+    "data/tsv/low_pow_2",
 ]
 
 COLOR_LIST_ALL_TSV_FOLDERS = [
@@ -27,6 +31,8 @@ COLOR_LIST_ALL_TSV_FOLDERS = [
     "brown",  # baseline 6
     "black",  # low_mag_1
     "gray",  # low_pow_1
+    "pink",  # low_mag_2
+    "cyan",  # low_pow_2
 ]
 
 MAX_NB_SCANS = 20

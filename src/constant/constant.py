@@ -38,5 +38,28 @@ COLOR_LIST_ALL_TSV_FOLDERS = [
 MAX_NB_SCANS = 20
 MIN_NB_SCANS = 15
 
+X_VALUES_MAX_EXC_0 = [i * 20 for i in range(1, MAX_NB_SCANS)]
+X_VALUES_MAX_INC_1 = [
+    1,
+    20,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200,
+    220,
+    240,
+    260,
+    280,
+    300,
+    320,
+    340,
+    360,
+    380,
+]
 X_VALUES_MAX = [i * 20 for i in range(MAX_NB_SCANS)]
 X_VALUES_MIN = [i * 20 for i in range(MIN_NB_SCANS)]

@@ -5,7 +5,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
-def exponential_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=True):
+def exponential_fit_1(x_values, y_values_list, baseline_nb_list: list[int], plot=True):
     """
     Fits multiple sets of y_values simultaneously to the function y = a * (1 - e^(-b * x)) using nonlinear regression.
 
@@ -178,7 +178,8 @@ def logarithm_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=Tru
                 x,
                 y_values,
                 label=f"Baseline {baseline_nb_list[idx]}",
-                color=distinct_colors[idx % 10],
+                # color=distinct_colors[idx % 10],
+                color="black",
                 alpha=0.7,
             )
 
@@ -197,7 +198,7 @@ def logarithm_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=Tru
         plt.xlabel("Time (minutes)", fontsize=12)
         plt.ylabel("Volume (%)", fontsize=12)
         plt.title("Logarithmic Fit", fontsize=14)
-        plt.legend(fontsize=10)
+        plt.legend(fontsize=20)
         plt.grid(True)
         plt.tight_layout()
 
@@ -209,7 +210,7 @@ def logarithm_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=Tru
 
 def exponential_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=True):
     """
-    Fits multiple sets of y_values simultaneously to the function y = a * exp(-b*x) using nonlinear regression.
+    Fits multiple sets of y_values simultaneously to the function y = a * exp(1/(-b*x)) using nonlinear regression.
 
     Parameters:
         x_values (list or numpy array): List of x-values (independent variable).
@@ -222,7 +223,7 @@ def exponential_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=T
             - 'a': Coefficient for the exponential function.
             - 'b': Exponent parameter.
             - 'r_squared': R-squared value.
-            - 'fitted_function': A function y(x) = a * exp(-b*x) for new x-values.
+            - 'fitted_function': A function y(x) = a * exp(1/(-b*x)) for new x-values.
             - 'fitted_y_values': Fitted y-values for the dataset.
     """
     # Ensure x_values and y_values_list are numpy arrays
@@ -241,12 +242,12 @@ def exponential_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=T
 
     # Define the exponential model function
     def model(x, a, b):
-        return a * np.exp(-b * x)
+        return a * np.exp(1 / (-b * x))
 
     # Fit the model to each dataset and calculate R-squared
     results = []
     for idx, y_values in enumerate(y_values_array):
-        params, _ = curve_fit(model, x, y_values, maxfev=10000)
+        params, _ = curve_fit(model, x, y_values, p0=[1.0, 1.0], maxfev=10000)
         a, b = params
 
         # Compute fitted values
@@ -268,7 +269,7 @@ def exponential_fit(x_values, y_values_list, baseline_nb_list: list[int], plot=T
                 "r_squared": r2,
                 "fitted_function": fitted_function,
                 "fitted_y_values": y_fitted.tolist(),
-                "function_string": f"y = {a:.10f} * exp(-{b:.10f} * x)",
+                "function_string": f"y = {a:.10f} * exp(1 / -{b:.10f} * x)",
             }
         )
 

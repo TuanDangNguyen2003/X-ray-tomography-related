@@ -18,7 +18,3 @@ Clone this repository and follow the setup instructions provided in the **`docs/
 - NumPy  
 - SciPy  
 - Matplotlib  
-
-## Usage
-
-Refer to **`docs/usage.md`** for detailed instructions on running the code and replicating the results.
